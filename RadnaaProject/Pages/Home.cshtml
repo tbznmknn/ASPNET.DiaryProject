@@ -1,0 +1,40 @@
+﻿@page
+@model RadnaaProject.Pages.HomeModel
+@{
+}
+<div class="row mt-6">
+    <h1 class="mt-4 p-6">Хяналтын самбар</h1>
+    <hr />
+    <partial name="_NavPartial"></partial>
+    <div class="row justify-content-center w-80 mt-5">
+       
+            <h1 >Системд амжилттай холбогдлоо. </h1>
+            <div class="ml-10">
+            <div class="btn-group dropright  p-1 ">
+                <button type="button" class="btn btn-secondary dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Хэрэглэгчийн булан
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/EditUserInfo">Шинэчлэх</a>
+                </div>
+            </div><br />
+            <div class="btn-group dropright p-1">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Өдрийн тэмдэглэл
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/BlogPosts/RecordItems">Хэрэглэгчийн тэмдэглэл</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/BlogPosts/CreateRecord">Тэмдэглэл нэмэх</a>
+        
+                   
+            
+                </div>
+            </div><br />
+           
+            </div>
+        
+    </div>
+        
+
+</div>

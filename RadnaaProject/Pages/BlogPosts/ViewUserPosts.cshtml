@@ -1,0 +1,189 @@
+﻿@page
+@model RadnaaProject.Pages.BlogPosts.ViewUserPostsModel
+@{
+}
+<style>
+    .carousel-item{
+        max-height:50rem;
+        background:#777;
+        color:white;
+        position: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .image-container{
+        height:100% 
+    }
+    .video-container{
+    max-width:100%;
+    max-height:100%;
+    }
+    .audiocontainer{
+        
+        background: #777;
+   
+        position: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin:34px;
+    }
+
+    .word-wrap-break {
+        word-wrap: break-word;
+    }
+</style>
+<partial name="_NavPartial"></partial>
+
+<div class="container">
+    <div class="row">
+        <article>
+            <header class="mb-4">
+          
+                <h1 class="fw-bolder mb-1 mt-4">@Model.DataRow.PostTitle </h1>
+            
+                <div class="text-muted fst-italic mb-1">Нийтлэгдсэн огноо @Model.DataRow.CDate.ToString("yyyy/MM/dd") </div>
+                <div class="text-muted fst-italic mb-1">Тэмдэглэлийн огноо @Model.DataRow.RDate.ToString("yyyy/MM/dd") </div>
+                <div class="text-muted fst-italic mb-1">Бичсэн @Model.UserName </div>
+                
+            
+                <a class="badge bg-secondary text-decoration-none link-light mb-1" href="/BlogPosts/RecordItems">Бүх тэмдэглэлүүд</a>
+
+
+                @* This is image carousel *@
+                <div id="carouselExample" class="carousel slide  mb-3" data-bs-interval="false">
+                    <ol class="carousel-indicators">
+                        @{
+                            if (Model.ImageFiles.Count > 0)
+                            {
+                                        <li data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></li>
+                                if (Model.ImageFiles.Count > 1)
+                                {
+                                    for(int i=1; i < Model.ImageFiles.Count; i++)
+                                    {
+                                                <li data-bs-target="#carouselExample" data-bs-slide-to="@i"></li>
+                                    }
+                                }
+                            }
+                        }
+                    </ol>
+                    <div class="carousel-inner mb-5">
+                        @{
+                            if (Model.ImageFiles.Count > 0)
+                            {
+                                        <div class="carousel-item active">
+                                            <img src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.ImageFiles[0])" class="d-block img-fluid mx-auto" alt="Slide 1">
+                                        </div>
+                                if (Model.ImageFiles.Count > 1)
+                                {
+                                    for(int i=1; i < Model.ImageFiles.Count; i++)
+                                    {
+                                                <div class="carousel-item image-container">
+                                                    <img src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.ImageFiles[i])" class="d-block img-fluid mx-auto">
+                                                </div>
+                                    }
+                                }
+                            }
+                        }   
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                @* This is video carousel *@
+                <div id="videoCarousel" class="carousel slide  mb-3" data-bs-interval="false">
+                    
+                    <div class="carousel-inner ">
+                        @{
+                            if (Model.VideoFiles.Count > 0)
+                            {
+                                        <div class="carousel-item active">
+                                            <video controls src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.VideoFiles[0])" class="d-block mx-auto video-container" alt="Slide 1"></video>
+                                        </div>
+                                if (Model.VideoFiles.Count > 1)
+                                {
+                                    for (int i = 1; i < Model.VideoFiles.Count; i++)
+                                    {
+                                                <div class="carousel-item image-container">
+                                                    <video controls src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.VideoFiles[i])" class="d-block mx-auto video-container"></video>
+                                                </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#videoCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#videoCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                @* This is video carousel *@
+                <div id="audioCarousel" class="carousel slide mb-3" data-bs-interval="false">
+                    <ol class="carousel-indicators">
+                        @{
+                            if (Model.AudioFiles.Count > 0)
+                            {
+                                        <li data-bs-target="#audioCarousel" data-bs-slide-to="0" class="active"></li>
+                                if (Model.AudioFiles.Count > 1)
+                                {
+                                    for (int i = 1; i < Model.AudioFiles.Count; i++)
+                                    {
+                                                <li data-bs-target="#audioCarousel" data-bs-slide-to="@i"></li>
+                                    }
+                                }
+                            }
+                        }
+                    </ol>
+                    <div class="carousel-inner ">
+                        @{
+                            if (Model.AudioFiles.Count > 0)
+                            {
+                                        <div class="carousel-item active">
+                                            <audio controls src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.AudioFiles[0])" class="d-block mx-auto audiocontainer" alt="Slide 1"></audio>
+                                        </div>
+                                if (Model.AudioFiles.Count > 1)
+                                {
+                                    for (int i = 1; i < Model.VideoFiles.Count; i++)
+                                    {
+                                                <div class="carousel-item image-container">
+                                                    <audio controls src="@Url.Content("~/users/"+Model.DataRow.UserID+"/"+Model.urdun+"/"+@Model.AudioFiles[i])" class="d-block mx-auto audiocontainer"></audio>
+                                                </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#audioCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#audioCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </header>
+            <section class="word-wrap-break mb-5">
+                <p class="fs-5 mb-4">@Model.DataRow.PostBody</p>
+                
+            </section>
+
+        </article>
+        
+            
+        <div style="display:inline-block; margin-right:10px;">
+            <a id="btn" class="btn btn-primary mt-2" asp-route-dataField="@Model.DataRow.Id" asp-page="/BlogPosts/RecordEditor">Шинэчлэх цонх</a>
+           
+        </div>
+    </div>
+</div>

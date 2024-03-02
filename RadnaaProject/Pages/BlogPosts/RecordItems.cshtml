@@ -1,0 +1,100 @@
+﻿@page
+@using System.Security.Claims;
+@model RadnaaProject.Pages.BlogPosts.RecordItemsModel
+@{
+    int i = 1;
+}
+<partial name="Shared/_NavPartial"></partial>
+<style>
+    .table-cell {
+        word-break: break-all;
+    }
+</style>
+<div class="container mt-5">
+    <div class="row mt-3">
+        <div class="table-responsive">
+            <table class="table table-striped table-dark overflow-hidden" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Рекорд ID</th>
+                        <th scope="col">Гарчиг</th>
+                        <th scope="col" >Нэмэлт мэдээлэл</th>
+                        <th scope="col">Огноо</th>
+                        <th scope="col">Бичсэн огноо</th>
+                        <th scope="col">
+                            Контрол
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.header)
+                    {
+                        if (item.PostBody.Length > 400)
+                        {
+                            item.PostBody = item.PostBody.Substring(0, 400) + "... (Үргэлжлэл бий)";
+
+                        }
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@item.Id</td>
+                            <td>@item.PostTitle</td>
+                            <td class="table-cell">@item.PostBody</td>
+                            <td>@item.RDate.ToString("yyyy/MM/dd")</td>
+                            <td>@item.CDate</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-page="/BlogPosts/ViewUserPosts" asp-route-identififerParam="@item.Id" type="button" class="btn btn-danger">Үзэх</a>
+                                    
+                                        <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">#</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" asp-route-dataField="@item.Id" asp-page="/BlogPosts/RecordEditor">Засварлах</a>
+                                            <div class="dropdown-divider"></div>
+                                            <form method="post" id="FormID">
+                                            <button class="dropdown-item"  id="btn">#</button>
+                                            </form>
+                                        </div>
+                                   
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        i = i + 1;
+
+                    }
+                </tbody>
+
+            </table>
+        </div>
+        
+    </div>
+</div>
+<div id="urdun"></div>
+<script>
+    let createbtn = document.getElementById("btn");
+    createbtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = document.getElementById("FormID");
+        let FData = new FormData(form);
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("urdun").innerHTML = "Амжилттай рекорд устгагдлаа.";
+                document.getElementById("urdun").className = "alert alert-success mt-2";
+            }
+        }
+        request.open("POST", "RecordItem?Handler=DeleteRecord");
+        request.send(FData);
+    });
+</script>
+
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<div>@userId</div>
+
+
+

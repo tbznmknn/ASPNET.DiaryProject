@@ -1,0 +1,17 @@
+﻿@page
+@model RadnaaProject.Pages.LogoutModel
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        <form class="form-inline" asp-page="/Logout"
+              asp-route-returnUrl="@Url.Page("/")" method="post">
+            <button type="submit" class="nav-link btn btn-link text-dark">
+                Гарах
+            </button>
+        </form>
+    }
+    else
+    {
+        <p class="alert alert-primary mt-1">Программаас амжилттай саллаа.</p>
+    }
+}

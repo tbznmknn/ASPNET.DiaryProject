@@ -1,0 +1,190 @@
+﻿@page
+@model RadnaaProject.Pages.BlogPosts.RecordEditorModel
+@{
+}
+<style>
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+    }
+</style>
+<div class="bg-secondary bg-opacity-10 py-2 ">
+    <div class="container">
+        <h1>Тэмдэглэлийн засварлалт</h1>
+    </div>
+</div>
+<partial name="_NavPartial"></partial>
+<div class="row mt-3">
+    
+    <div class="col-lg-9">
+        <a class="badge bg-secondary text-decoration-none link-light mb-1" href="/BlogPosts/RecordItems">Бүх тэмдэглэлүүд</a>
+        <form method="post" enctype="multipart/form-data" id="FormID" >
+            <div class="form-group">
+                <label>Тэмдэглэлийн дугаар</label>
+                <input class="form-control text-secondary" asp-for="UID" type="text" value="@Model.RecordIdReceived" placeholder="@Model.RecordIdReceived" readonly />
+            </div>
+            <div class="form-group">
+                <label>Тэмдгэглэлийн Гарчиг</label>
+                <input asp-for="RecordTitle" class="form-control" type="text" value="@Model.oldrecord.PostTitle"/>
+                
+             
+                
+               
+            </div>
+            <div class="form-group mb-2">
+                <label>Тэмдэглэлийн бие</label>
+                <textarea asp-for="RecordBody" class="form-control" rows="7">fadfdfdsffsa</textarea>
+               
+            </div>
+            <div class="form-group">
+                @{
+                    string date = string.Format("{0}-{1}-{2}", Model.oldrecord.RDate.Year, Model.oldrecord.RDate.Month.ToString("d2"), Model.oldrecord.RDate.Day.ToString("d2"));
+                }
+                <label>Он цаг</label>
+                <input asp-for="RDate" type="date" id="date" class="text-secondary" style=" border: 2px solid darkturquoise; border-radius: 8px;" readonly value="@date">
+            
+            </div>  
+            <hr />
+            
+            <div class="form-group mt-2">
+                <label>Шинэ зурган хавсаргалт</label>
+                <input type="file" asp-for="zuragnuud" id="imgInput" multiple accept="image/jpeg, image/png, image/jpg"><br>
+                @*    <img id="imgsource" class="invisible img-thumbnail mt-3"  alt="Portraitpic" width="250" height="300"> *@
+            </div>
+            <div class="form-group mt-2">
+                <label>Шинэ видео хавсаргалт</label>
+                <input type="file" asp-for="videonuud" id="videoInput" multiple accept="video/mp4, video/mkv"><br>
+            </div>
+            <div class="form-group mt-2">
+                <label>Шинэ аудио хавсаргалт</label>
+                <input type="file" asp-for="audionuud" id="audioInput" multiple accept="audio/m4a, audio/flac, audio/mp3, audio/wav"><br>
+            </div>
+            <div id="imagePreview">
+            </div>
+            <div style="display:inline-block; margin-right:10px;">
+                <button id="btn" class="btn btn-primary mt-2">Шинэчлэх</button>
+                
+            </div>
+            
+            <div id="imagePreview">
+            </div>
+            
+        </form>
+        <form id="DeleteFormView" method="post">
+            <button id="btnDelete" class="btn btn-danger mt-2">Устгах</button>
+
+        </form>
+        
+       
+    </div>
+</div>
+<div id="urdun">
+
+</div>
+<div id="ustgalt">
+</div>
+
+@* Shinechleh buttonnii AJAX request *@
+<script>
+    let createbtn = document.getElementById("btn");
+    createbtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = document.getElementById("FormID");
+        let FData = new FormData(form);
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let response = JSON.parse(this.responseText);
+                if (response.success) {
+                    document.getElementById("urdun").innerHTML = response.message;
+                    document.getElementById("urdun").className = "alert alert-success mt-2";
+                } else {
+                    document.getElementById("urdun").innerHTML = "Error: " + response.message;
+                    document.getElementById("urdun").className = "alert alert-danger mt-2";
+                }
+            }
+        }
+        request.open("POST", "RecordEditor?Handler=EditRecord");
+        request.send(FData);
+    });
+</script>
+
+<script>
+    let deletebtn = document.getElementById("btnDelete");
+    deletebtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = document.getElementById("FormID");
+        let FData = new FormData(form);
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let response = JSON.parse(this.responseText);
+                if (response.success) {
+                    document.getElementById("ustgalt").innerHTML = response.message;
+                    document.getElementById("ustgalt").className = "alert alert-success mt-2";
+                    window.location.href = "/BlogPosts/RecordItems";
+                } else {
+                    document.getElementById("ustgalt").innerHTML = "Error: " + response.message;
+                    document.getElementById("ustgalt").className = "alert alert-danger mt-2";
+                }
+            }
+        }
+        request.open("POST", "RecordEditor?Handler=DeleteRecordAndRedirect");
+        request.send(FData);
+    });
+</script>
+
+@* Ustgah buttonii AJAX request *@
+@* <script>
+    let deletebtn = document.getElementById("btnDelete");
+    deletebtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        let req = new XMLHttpRequest();
+        req.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let date = this.responseText;
+                document.getElementById("date").innerHTML = date;
+            }
+        }
+        req.open("POST", "RecordEditor?Handler=DeleteRecordAndRedirect");
+        req.send();
+
+</script> *@
+
+@* Zuragnuudiig preview hiih *@
+<script>
+    document.getElementById('imgInput').addEventListener('change', handleFileSelect, false);
+
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const imagePreview = document.getElementById('imagePreview');
+
+        imagePreview.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith('image/')) {
+                continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.className = 'preview-image';
+                    imgElement.src = e.target.result;
+                    imgElement.title = theFile.name;
+                    imagePreview.appendChild(imgElement);
+                };
+            })(file);
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+
+</script>

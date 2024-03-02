@@ -1,0 +1,92 @@
+﻿@page
+@model RadnaaProject.Pages.EditUserInfoModel
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2 ">
+    <div class="container">
+        <h1>Хэрэглэгчийн хувийн мэдээллийн шинэчлэлтийн форм</h1>
+    </div>
+</div>
+<partial name="_NavPartial" ></partial>
+<div class="row mt-3">
+    <div class="col-lg-9">
+        <form method="post" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label>Нэвтрэх нэр</label>
+                <input class="form-control" type="text" placeholder="@User.Identity.Name" readonly />
+            </div>
+            <div class="form-group">
+                <label>Цахим шуудан</label>
+                <input asp-for="Email" type="email"  class="form-control" />
+      
+            </div>
+            <div class="form-group">
+                <label>Утасны дугаар</label>
+                <input asp-for="mobileNumber" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Хуучин нууц үг</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check mt-2">
+                <input type="checkbox" class="form-check-input" id="enableInput">
+                <label class="form-check-label" for="exampleCheck1">Нууц үг шинэчлэх</label>
+            </div>
+            <div class="form-group">
+                <label>Шинэ нууц үг</label>
+                <input asp-for="NewPassword" id="passInput" type="password" class="form-control" disabled />
+            </div><hr />
+            <div class="form-group mt-2">
+                <label>Нүүр зураг</label>
+                <input type="file" asp-for="zurag" id="imgInput" accept="image/jpeg, image/png, image/jpg"><br>
+                <img id="imgsource" class="invisible img-thumbnail mt-3"  alt="Portraitpic" width="250" height="300">
+            </div>
+            <button asp-page-handler="Update" id="btn" class="btn btn-primary mt-2">Submit</button>
+        
+        </form>
+        @{
+          
+        }
+    </div>
+</div>
+<script>
+    let btn = document.getElementById("imgInput");
+    let zurag = document.getElementById("imgsource")
+    btn.addEventListener('change', (e) => {
+        e.preventDefault();
+        zurag.classList.remove('invisible');
+        
+        let file = document.getElementById("imgInput").files;
+        if (file.length > 0) {
+            var fReader = new FileReader;
+            fReader.onload = function (event) {
+                document.getElementById("imgsource").setAttribute("src", event.target.result);
+            };
+            fReader.readAsDataURL(file[0]);
+        }
+    });
+    document.getElementById("enableInput").addEventListener('change', function () {
+        var textInput = document.getElementById("passInput");
+        textInput.disabled = !this.checked;
+    })
+
+</script>
+@{
+    if (Model.result == "NoUser")
+    {
+        <p class="alert alert-danger mt-5">Хэрэглэгч алга.</p>
+    }
+    else if (Model.result == "PasswordMismatch")
+    {
+        <p class="alert alert-danger mt-5">Пассворд зөрлөө.</p>
+    }
+    else if (Model.result == "Done")
+    {
+        <p class="alert alert-danger mt-5">Амжилттай шинэчлэгдлээ.</p>
+    }
+
+    
+}

@@ -1,0 +1,156 @@
+﻿@page
+@model RadnaaProject.Pages.BlogPosts.CreateRecordModel
+@{
+}
+<style>
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+    }
+</style>
+<partial name="Shared/_NavPartial"></partial>
+<div class ="row">
+    <div class="w-100">
+        <fieldset class="mt-3"> 
+            <a class="badge bg-secondary text-decoration-none link-light mb-1" href="/BlogPosts/RecordItems">Бүх тэмдэглэлүүд</a>
+            <legend>Өдрийн тэмдэглэл нэмэх</legend>
+            <form method="post" id="FormID" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Он цаг</label>
+                    <input asp-for="RDate" type="date" id="date" style=" border: 2px solid darkturquoise; border-radius: 8px;" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    <span asp-validation-for="RDate" class="text-danger"></span>
+                </div>    
+                <div class="form-group">
+                    <label>Оноох гарчиг</label>
+                    <input type="text" asp-for="RecordTitle" class="form-control" id="titleIN" placeholder="Гарчиг">
+                        <span asp-validation-for="RecordTitle" class="text-danger"></span>
+                    </div>
+                <div class="form-group">
+                    <label>Мэдээлэл</label>
+                    <textarea class="form-control" asp-for="RecordBody" id="bodyIN" rows="4"></textarea>
+                        <span asp-validation-for="RecordBody" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group mt-2">
+                    <label>Зурган хавсаргалт</label>
+                    <input type="file" asp-for="zuragnuud" id="imgInput" multiple accept="image/jpeg, image/png, image/jpg" ><br>
+                 @*    <img id="imgsource" class="invisible img-thumbnail mt-3"  alt="Portraitpic" width="250" height="300"> *@
+                </div>
+                <div class="form-group mt-2">
+                    <label>Видео хавсаргалт</label>
+                    <input type="file" asp-for="videonuud" id="videoInput" multiple accept="video/mp4, video/mkv"><br>
+                </div>
+                    <div class="form-group mt-2">
+                        <label>Аудио хавсаргалт</label>
+                        <input type="file" asp-for="audionuud" id="audioInput" multiple accept="audio/m4a, audio/flac, audio/mp3, audio/wav"><br>
+                    </div>
+                    <div id="imagePreview">
+                     
+                 </div>
+
+                <button id="btn" class="btn btn-primary mt-2">Submit</button>
+                <p id="urdun"></p>
+            </form>
+        </fieldset>
+    </div>
+   
+
+</div>
+
+
+@* Zuragnuudiig preview hiih *@
+<script>
+    document.getElementById('imgInput').addEventListener('change', handleFileSelect, false);
+
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const imagePreview = document.getElementById('imagePreview');
+
+        imagePreview.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith('image/')) {
+                continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.className = 'preview-image';
+                    imgElement.src = e.target.result;
+                    imgElement.title = theFile.name;
+                    imagePreview.appendChild(imgElement);
+                };
+            })(file);
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+   
+</script>
+@* Record uusgehdee ashiglah AJAX request *@
+<script>
+    let createbtn = document.getElementById("btn");
+    createbtn.addEventListener('click', function (e) {
+        // document.getElementById("urdun").innerHTML = "Amjilttai";
+        // document.getElementById("urdun").className = "alert alert-success mt-2";
+        e.preventDefault();
+        let form = document.getElementById("FormID");
+        let FData = new FormData(form);
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("urdun").innerHTML = "Амжилттай рекорд үүсгэгдлээ.";
+                document.getElementById("urdun").className = "alert alert-success mt-2";
+            }
+        }
+        request.open("POST", "CreateRecord?Handler=CreateRecord");
+        request.send(FData);
+    });
+</script>
+
+
+
+
+
+@* <script>
+    let btn = document.getElementById("btn");
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("urdun").innerHTML = "Amjilttai";
+                document.getElementById("urdun").className = "alert alert-success";
+            }
+        }
+        request.open("POST", "CreateRecord?Handler=CreateRecord");
+        request.send();
+        
+    })
+</script> *@
+@* <script>
+    let btn = document.getElementById("okk");
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        let file = document.getElementById("imgInput").files
+        for (let i = 0; i < file; i++) {
+            var newDiv = document.createElement('div');
+            newDiv.textContent = file[i];
+            document.getElementById("okman").appendChild(newDiv);
+        }
+        document.getElementById("okman").innerHTML = document.getElementById("imgInput").value;
+    });
+</script> *@
+
+
+
+
+

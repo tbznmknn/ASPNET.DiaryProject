@@ -1,0 +1,61 @@
+﻿@page
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@model RadnaaProject.Pages.UserRegistrationModel
+@{
+}
+<div class="bg-secondary bg-opacity-10 py-2  mt-1 mb-10">
+    <div class="container">
+        <h1>Бүртгэлийн форм</h1>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-lg-9">
+        <form method="post">
+            <div class="form-group">
+                <label>Цахим шуудан</label>
+                <input asp-for="In_Mail" class="form-control" />
+                <span asp-validation-for="In_Mail" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label>Нэвтрэх нэр</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+                
+            </div>
+            <div class="form-group">
+                <label>Утасны дугаар</label>
+                <input asp-for="mobileNumber" class="form-control" />
+            
+
+            </div>
+            <div class="form-group">
+                <label>Нууц үг</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Нууц үгний давталтан шалгалт</label>
+                <input asp-for="PasswordConfirmation" type="password" class="form-control" />
+                <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
+            </div>
+            <small id="userhelp" class="form-text text-muted">Бид таны эмзэг мэдээллийг бусдад зарахгүй.</small><br />
+            <button asp-page-handler="UserRegister" class="btn btn-primary mt-2">Submit</button>
+        </form>
+        @{
+            if (Model.result == "success")
+            {
+                <p class="alert alert-success mt-5">
+                    Бүртгэл амжилттай боллоо. &nbsp
+                    Нэвтрэх цонхыг хэрэглэн нэвтэрнэ үү. <br>
+                    <a asp-page="/Login">Нэвтрэх цонх</a>
+                </p>
+            }
+            else if (Model.result == "error")
+            {
+                <p class="alert alert-danger mt-5"> Бүртгэл амжилтгүй боллоо.</p>
+            }
+
+        }
+    </div>
+</div>

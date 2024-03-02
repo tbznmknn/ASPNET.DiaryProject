@@ -1,0 +1,42 @@
+﻿@page
+@model RadnaaProject.Pages.LoginModel
+@{
+}
+<div class="bg-secondary bg-opacity-10 py-2  mt-1 mb-10">
+    <div class="container">
+        <h1>Нэвтрэх булан</h1>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-lg-9">
+        <form method="post">
+            <div class="form-group">
+                <label>Нэвтрэх нэр</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+
+            </div>
+            <div class="form-group mt-2">
+                <label>Нууц үг</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check mt-2">
+                <input asp-for="RememberMe" type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Намайг сана.</label>
+            </div>
+           
+            <button asp-page-handler="UserRegister" class="btn btn-primary mt-2">Submit</button>
+        </form>
+        @{
+            if (Model.result == "failed")
+            {
+                <p class="alert alert-danger mt-5">нэвтрэх оролдлого амжилтгүй боллоо</p>
+            }
+            if (Model.errmsg != "")
+            {
+                <p class="alert alert-warning mt-1">@Model.errmsg</p>
+            }
+        }
+    </div>
+</div>
